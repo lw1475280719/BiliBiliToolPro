@@ -8,8 +8,7 @@
     - [1.1. 方式一：修改配置文件](#11-方式一修改配置文件)
     - [1.2. 方式二：命令启动时通过命令行参数配置](#12-方式二命令启动时通过命令行参数配置)
     - [1.3. 方式三：添加环境变量（推荐）](#13-方式三添加环境变量推荐)
-    - [1.4. 方式四：托管在GitHub Actions上，使用GitHub Secrets配置](#14-方式四托管在github-actions上使用github-secrets配置)
-    - [1.5. 方式五：托管在青龙面板上，使用面板的配置文件页配置](#15-方式五托管在青龙面板上使用面板的配置文件页配置)
+    - [1.4. 方式四：托管在青龙面板上，使用面板的环境变量页或配置文件页进行配置](#14-方式四托管在青龙面板上使用面板的环境变量页或配置文件页进行配置)
 - [2. 优先级](#2-优先级)
 - [3. 详细配置说明](#3-详细配置说明)
     - [3.1. Cookie字符串](#31-cookie字符串)
@@ -19,15 +18,20 @@
         - [3.2.3. 两次调用B站Api之间的间隔秒数](#323-两次调用b站api之间的间隔秒数)
         - [3.2.4. 间隔秒数所针对的HttpMethod](#324-间隔秒数所针对的httpmethod)
         - [3.2.5. 请求B站接口时头部传递的User-Agent](#325-请求b站接口时头部传递的user-agent)
-        - [3.2.6. WebProxy（代理）](#326-webproxy代理)
+        - [3.2.6. App请求B站接口时头部传递的User-Agent](#326-app请求b站接口时头部传递的user-agent)
+        - [3.2.7. WebProxy（代理）](#327-webproxy代理)
     - [3.3. 每日任务相关](#33-每日任务相关)
-        - [3.3.1. 每日投币数量](#331-每日投币数量)
-        - [3.3.2. 投币时是否同时点赞](#332-投币时是否同时点赞)
-        - [3.3.3. 优先选择支持的up主Id集合](#333-优先选择支持的up主id集合)
-        - [3.3.4. 每月几号自动充电](#334-每月几号自动充电)
-        - [3.3.5. 充电对象](#335-充电对象)
-        - [3.3.6. 每月几号自动领取会员权益](#336-每月几号自动领取会员权益)
-        - [3.3.7. 每月几号进行直播中心银瓜子兑换硬币](#337-每月几号进行直播中心银瓜子兑换硬币)
+        - [3.3.1. 是否开启观看视频任务](#331-是否开启观看视频任务)
+        - [3.3.2. 是否开启分享视频任务](#332-是否开启分享视频任务)
+        - [3.3.3. 每日投币数量](#333-每日投币数量)
+        - [3.3.4. 投币时是否同时点赞](#334-投币时是否同时点赞)
+        - [3.3.5. 优先选择支持的up主Id集合](#335-优先选择支持的up主id集合)
+        - [3.3.6. 每月几号自动充电](#336-每月几号自动充电)
+        - [3.3.7. 充电对象](#337-充电对象)
+        - [3.3.8. 每月几号自动领取会员权益](#338-每月几号自动领取会员权益)
+        - [3.3.9. 每月几号进行直播中心银瓜子兑换硬币](#339-每月几号进行直播中心银瓜子兑换硬币)
+        - [3.3.10. Lv6后开启硬币白嫖模式](#3310-lv6后开启硬币白嫖模式)
+        - [3.3.11. 是否开启专栏投币](#3311-是否开启专栏投币)
     - [3.4. 天选时刻抽奖相关](#34-天选时刻抽奖相关)
         - [3.4.1. 根据关键字排除奖品](#341-根据关键字排除奖品)
         - [3.4.2. 根据关键字指定奖品](#342-根据关键字指定奖品)
@@ -38,29 +42,42 @@
         - [3.5.2. 批量取关的人数](#352-批量取关的人数)
         - [3.5.3. 取关白名单](#353-取关白名单)
     - [3.6. 推送相关](#36-推送相关)
-        - [3.6.1. Telegram机器人](#361-telegram机器人)
-            - [3.6.1.1. botToken](#3611-bottoken)
-            - [3.6.1.2. chatId](#3612-chatid)
-        - [3.6.2. 企业微信机器人](#362-企业微信机器人)
-            - [3.6.2.1. webHookUrl](#3621-webhookurl)
-        - [3.6.3. 钉钉机器人](#363-钉钉机器人)
+        - [3.6.1. 是否开启每个账号单独推送消息](#361-是否开启每个账号单独推送消息)
+        - [3.6.2. Telegram机器人](#362-telegram机器人)
+            - [3.6.2.1. botToken](#3621-bottoken)
+            - [3.6.2.2. chatId](#3622-chatid)
+            - [3.6.2.3. proxy](#3623-proxy)
+        - [3.6.3. 企业微信机器人](#363-企业微信机器人)
             - [3.6.3.1. webHookUrl](#3631-webhookurl)
-        - [3.6.4. Server酱](#364-server酱)
-            - [3.6.4.1. TurboScKey（Server酱SCKEY）](#3641-turbosckeyserver酱sckey)
-        - [3.6.5. 酷推](#365-酷推)
-            - [3.6.5.1. sKey](#3651-skey)
-        - [3.6.6. 推送到自定义Api](#366-推送到自定义api)
-            - [3.6.6.1. api](#3661-api)
-            - [3.6.6.2. placeholder](#3662-placeholder)
-            - [3.6.6.3. bodyJsonTemplate](#3663-bodyjsontemplate)
-        - [3.6.7. PushPlus[推荐]](#367-pushplus推荐)
-            - [3.6.7.1. PushPlus的Token](#3671-pushplus的token)
-            - [3.6.7.2. PushPlus的Topic](#3672-pushplus的topic)
-            - [3.6.7.3. PushPlus的Channel](#3673-pushplus的channel)
-            - [3.6.7.4. PushPlus的Webhook](#3674-pushplus的webhook)
+        - [3.6.4. 钉钉机器人](#364-钉钉机器人)
+            - [3.6.4.1. webHookUrl](#3641-webhookurl)
+        - [3.6.5. Server酱](#365-server酱)
+            - [3.6.5.1. TurboScKey（Server酱SCKEY）](#3651-turbosckeyserver酱sckey)
+        - [3.6.6. 酷推](#366-酷推)
+            - [3.6.6.1. sKey](#3661-skey)
+        - [3.6.7. 推送到自定义Api](#367-推送到自定义api)
+            - [3.6.7.1. api](#3671-api)
+            - [3.6.7.2. placeholder](#3672-placeholder)
+            - [3.6.7.3. bodyJsonTemplate](#3673-bodyjsontemplate)
+        - [3.6.8. PushPlus[推荐]](#368-pushplus推荐)
+            - [3.6.8.1. PushPlus的Token](#3681-pushplus的token)
+            - [3.6.8.2. PushPlus的Topic](#3682-pushplus的topic)
+            - [3.6.8.3. PushPlus的Channel](#3683-pushplus的channel)
+            - [3.6.8.4. PushPlus的Webhook](#3684-pushplus的webhook)
+        - [3.6.9. Microsoft Teams](#369-microsoft-teams)
+            - [3.6.9.1. Microsoft Teams的Webhook](#3691-microsoft-teams的webhook)
+        - [3.6.10. 企业微信应用推送](#3610-企业微信应用推送)
+            - [3.6.10.1. 企业微信应用推送的corpId](#36101-企业微信应用推送的corpid)
+            - [3.6.10.2. 企业微信应用推送的agentId](#36102-企业微信应用推送的agentid)
+            - [3.6.10.3. 企业微信应用推送的secret](#36103-企业微信应用推送的secret)
     - [3.7. 日志相关](#37-日志相关)
         - [3.7.1. Console日志输出等级](#371-console日志输出等级)
         - [3.7.2. Console日志输出样式](#372-console日志输出样式)
+        - [3.7.3. 定时任务相关](#373-定时任务相关)
+        - [3.7.4. 定时任务](#374-定时任务)
+        - [3.7.5. Crontab](#375-crontab)
+    - [3.8. 大积分相关](#38-大积分相关)
+        - [3.8.1. 自定义观看番剧](#381-自定义观看番剧)
 
 <!-- /TOC -->
 
@@ -73,15 +90,12 @@
 
 默认有3个配置文件：`appsettings.json`、`appsettings.Development.json`、`appsettings.Production.json`，分别对应默认、开发与生产环境。
 
-如果运行环境为开发环境，则`appsettings.Development.json`优先级高于`appsettings.json`，即`appsettings.Development.json`里的配置会覆盖默认配置（不是全部覆盖，`appsettings.Development.json`里加了几个就覆盖几个）；
-
-如果运行环境为生产环境，则`appsettings.Production.json`优先级高于`appsettings.json`，即`appsettings.Production.json`里的配置会覆盖默认配置（同样不是全部覆盖，`appsettings.Production.json`里加了几个就覆盖几个）。
-
-对于不是开发人员的大部分人来说，只需要关注`appsettings.Production.json`即可，因为非调试状态下运行的默认环境就是生产环境。此时如需自定义配置，推荐在`appsettings.Production.json`文件中进行修改（并且以后都只修改`appsettings.Production.json`文件，`appsettings.json`只作为默认的全量模板而存在）
+对于不是开发人员的大部分人来说，只需要关注`appsettings.Production.json`即可。
 
 <a id="markdown-12-方式二命令启动时通过命令行参数配置" name="12-方式二命令启动时通过命令行参数配置"></a>
 ### 1.2. 方式二：命令启动时通过命令行参数配置
-在使用命令行启动时，可使用`-key=value`的形式附加配置，所有可用的命令行参数均在 [命令行参数映射](../src/Ray.BiliBiliTool.Console/commandLineMappings.json) 文件中。
+
+在使用命令行启动时，可使用`-key=value`的形式附加配置，所有可用的命令行参数均在 [命令行参数映射表](../src/Ray.BiliBiliTool.Config/Constants.cs#L76-L105) 中。
 
 * 使用跨平台的依赖包
 
@@ -127,24 +141,22 @@ dotnet Ray.BiliBiliTool.Console.dll
 
 注意区分单下划线和双下划线，linux系统使用 `export` 关键字代替 `set` 。
 
-<a id="markdown-14-方式四托管在github-actions上使用github-secrets配置" name="14-方式四托管在github-actions上使用github-secrets配置"></a>
-### 1.4. 方式四：托管在GitHub Actions上，使用GitHub Secrets配置
+<a id="markdown-14-方式四托管在青龙面板上使用面板的环境变量页或配置文件页进行配置" name="14-方式四托管在青龙面板上使用面板的环境变量页或配置文件页进行配置"></a>
+### 1.4. 方式四：托管在青龙面板上，使用面板的环境变量页或配置文件页进行配置
 
-使用GitHub Actions，可以通过添加Secret实现配置。
+青龙面板配置，其本质还是通过环境变量进行配置，有如下两种方式。
 
-比如，配置微信推送的SCKEY，可以添加如下Secret：
+- 环境变量页[推荐]
 
-Secret Name：`PUSHSCKEY`
+例如：
 
-Secret Value：`123abc`
+名称：`Ray_BiliBiliCookies__1`
 
-这些 Secrets 会通过 workflow 里的yml脚本映射为环境变量，在应用启动时作为环境变量配置源传入程序当中，所以使用 GitHub Secrets 配置的本质是使用环境变量配置。
+值：`abcde`
 
-![添加GitHub Secrets](imgs/git-secrets.png)
+![qinglong-env.png](imgs/qinglong-env.png)
 
-<a id="markdown-15-方式五托管在青龙面板上使用面板的配置文件页配置" name="15-方式五托管在青龙面板上使用面板的配置文件页配置"></a>
-### 1.5. 方式五：托管在青龙面板上，使用面板的配置文件页配置
-青龙面板配置，其本质还是通过环境变量进行配置。Linux使用export关键字来添加环境变量，青龙面板中的`配置文件`页面可以用来保存这些export指令。
+- 配置文件页
 
 例如，配置Cookie和推送：
 
@@ -153,8 +165,9 @@ export Ray_BiliBiliCookies__1="_uuid=abc..."
 export Ray_Serilog__WriteTo__9__Args__token="abcde"
 ```
 
-当然，Cookie还可以在青龙面板的`环境变量`页配置，名称是`Ray_BiliBiliCookies__1`或`Ray_BiliBiliCookies__2`，指就是对应的CK。好处是可以方便地通过点击禁用或开启来管理多账号。
+![qinglong-config.png](imgs/qinglong-config.png)
 
+配置文件页添加、修改配置，需要重启青龙容器使之生效，环境变量页则可以立即生效，所以推荐使用环境变量页配置。
 
 <a id="markdown-2-优先级" name="2-优先级"></a>
 ## 2. 优先级
@@ -168,11 +181,12 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 <a id="markdown-31-cookie字符串" name="31-cookie字符串"></a>
 ### 3.1. Cookie字符串
-没有它，程序的运行就没有意义，所以它是必填项。
+
+必填。
 
 | TITLE | CONTENT | 示例 |
 | ---------- | -------------- | -------------- |
-| 配置Key | `BiliBiliCookies__1` | |
+| 配置Key | `BiliBiliCookies:1` | |
 | 值域   | 字符串，英文分号分隔，来自浏览器抓取 | |
 | 默认值   | 空 | |
 | 环境变量 | `Ray_BiliBiliCookies__1` | Windows：`set Ray_BiliBiliCookies__1=abc=123;def=456;` Linux:`export Ray_BiliBiliCookies__1=abc=123;def=456;` |
@@ -180,7 +194,7 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   | 示例 |
 | ---------- | -------------- | -------------- |
-| 配置Key | `BiliBiliCookies__2` | |
+| 配置Key | `BiliBiliCookies:2` | |
 | 值域   | 字符串，英文分号分隔，来自浏览器抓取 | |
 | 默认值   | 空 | |
 | 环境变量  | `Ray_BiliBiliCookies__2` | Windows：`set Ray_BiliBiliCookies__2=abc=123;def=456;` Linux:`export Ray_BiliBiliCookies__2=abc=123;def=456;` |
@@ -199,46 +213,37 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   | 示例 |
 | ---------- | -------------- | -------------- |
-| 配置Key | `Security__IsSkipDailyTask` | |
+| 配置Key | `Security:IsSkipDailyTask` | |
 | 值域   | [true,false] | |
 | 默认值   | false | |
 | 环境变量 | `Ray_Security__IsSkipDailyTask` | `set Ray_Security__IsSkipDailyTask=true` |
-| GitHub Secrets | `ISSKIPDAILYTASK` | Name:`ISSKIPDAILYTASK`  Value: `true`|
-
-若想要彻底关闭，即Actions不运行，点击Actions进入Workflows列表，点击相应任务（如`bilibili-daily-task.yml`）的Workflow，在搜索框右侧有一个三个点的设置按钮，点击按钮后，在弹出的下拉列表里选中`Disable workflow`项即可。
 
 <a id="markdown-322-随机睡眠的最大时长" name="322-随机睡眠的最大时长"></a>
 #### 3.2.2. 随机睡眠的最大时长
-用于设置程序启动后，随机睡眠时间的最大上限值，单位为分钟。
 
-默认为10，即程序每天运行后会随机睡眠1到10分钟。这样可以避免程序每天准点地在同一时间运行，太像机器。
+用于设置程序启动后，随机睡眠时间的最大上限值，单位为分钟。
+这样可以避免程序每天准点地在同一时间运行太像机器。
 
 配置为0则不进行睡眠。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Security__RandomSleepMaxMin` |
+| 配置Key | `Security:RandomSleepMaxMin` |
 | 值域   | 数字 |
 | 默认值   | 20 |
 | 环境变量 | `Ray_Security__RandomSleepMaxMin` |
-| GitHub Secrets | `RANDOMSLEEPMAXMIN`|
 
 <a id="markdown-323-两次调用b站api之间的间隔秒数" name="323-两次调用b站api之间的间隔秒数"></a>
 #### 3.2.3. 两次调用B站Api之间的间隔秒数
-因为有朋友反馈，程序在1到2秒内连续调用B站的Api过快，担心会被B站的安全策略检测到，影响自己的账号安全。
 
-所以我添加这个安全策略的配置，可以设置两次Api请求之间的最短时间间隔。
-
-举例来说，之前的5次投币可能是在1秒之内完成的，现在通过配置间隔时间，可以将其变为投币一次后，经过4到5秒才会投下一个，提升程序的演技，让它表现的就像真人在投币一样，骗过BiliBili~ 
+用于设置两次Api请求之间的最短时间间隔，避免程序在1到2秒内连续调用B站的Api过快。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Security__IntervalSecondsBetweenRequestApi` |
+| 配置Key | `Security:IntervalSecondsBetweenRequestApi` |
 | 值域   | [0,+] |
 | 默认值   | 20 |
 | 环境变量   | `Ray_Security__IntervalSecondsBetweenRequestApi` |
-| GitHub Secrets | `INTERVALSECONDSBETWEENREQUESTAPI` |
-
 
 <a id="markdown-324-间隔秒数所针对的httpmethod" name="324-间隔秒数所针对的httpmethod"></a>
 #### 3.2.4. 间隔秒数所针对的HttpMethod
@@ -246,35 +251,48 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Security__IntervalMethodTypes` |
+| 配置Key | `Security:IntervalMethodTypes` |
 | 值域   | [GET,POST]，多个以英文逗号分隔 |
 | 默认值   | POST |
 | 环境变量   | `Ray_Security__IntervalMethodTypes` |
-| GitHub Secrets  | `INTERVALMETHODTYPES` |
 
 <a id="markdown-325-请求b站接口时头部传递的user-agent" name="325-请求b站接口时头部传递的user-agent"></a>
 #### 3.2.5. 请求B站接口时头部传递的User-Agent
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Security__UserAgent` |
+| 配置Key | `Security:UserAgent` |
 | 值域   | 字符串，可以F12从自己的浏览器获取 |
 | 默认值   | Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36 Edg/87.0.664.41 |
 | 环境变量   | `Ray_Security__UserAgent` |
-| GitHub Secrets  | `USERAGENT`|
+
+获取浏览器中自己的UA的方法见下图：
+
+![获取User-Agent](imgs/get-user-agent.png)
+
+<a id="markdown-326-app请求b站接口时头部传递的user-agent" name="326-app请求b站接口时头部传递的user-agent"></a>
+#### 3.2.6. App请求B站接口时头部传递的User-Agent
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `Security:UserAgentApp` |
+| 值域   | 字符串，可以F12从自己的浏览器获取 |
+| 默认值   | Mozilla/5.0 (Linux; Android 12; SM-S9080 Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 os/android model/SM-S9080 build/7760700 osVer/12 sdkInt/32 network/2 BiliApp/7760700 mobi_app/android channel/bili innerVer/7760710 c_locale/zh_CN s_locale/zh_CN disable_rcmd/0 7.76.0 os/android model/SM-S9080 mobi_app/android build/7760700 channel/bili innerVer/7760710 osVer/12 network/2 |
+| 环境变量   | `Ray_Security__UserAgentApp` |
 
 获取浏览器中自己的UA的方法见下图：
 
 ![获取User-Agent](imgs/get-user-agent.png)
 
 
-<a id="markdown-326-webproxy代理" name="326-webproxy代理"></a>
-#### 3.2.6. WebProxy（代理）
+<a id="markdown-327-webproxy代理" name="327-webproxy代理"></a>
+#### 3.2.7. WebProxy（代理）
+
 支持需要账户密码的代理。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Security__WebProxy` |
+| 配置Key | `Security:WebProxy` |
 | 值域   | 字符串，形如：user:password@host:port |
 | 默认值   | 无 |
 | 环境变量   | `Ray_Security__WebProxy` |
@@ -282,40 +300,65 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 <a id="markdown-33-每日任务相关" name="33-每日任务相关"></a>
 ### 3.3. 每日任务相关
-<a id="markdown-331-每日投币数量" name="331-每日投币数量"></a>
-#### 3.3.1. 每日投币数量
+
+<a id="markdown-331-是否开启观看视频任务" name="331-是否开启观看视频任务"></a>
+#### 3.3.1. 是否开启观看视频任务
+
+当该配置被设置为`false`时会导致大积分任务中的签到领额外10点经验的任务不能自动完成。
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `DailyTaskConfig:IsWatchVideo` |
+| 值域   | [true,false] |
+| 默认值   | true |
+| 环境变量   | `Ray_DailyTaskConfig__IsWatchVideo` |
+| GitHub Secrets  |  |
+
+<a id="markdown-332-是否开启分享视频任务" name="332-是否开启分享视频任务"></a>
+#### 3.3.2. 是否开启分享视频任务
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `DailyTaskConfig:IsShareVideo` |
+| 值域   | [true,false] |
+| 默认值   | true |
+| 环境变量   | `Ray_DailyTaskConfig__IsShareVideo` |
+| GitHub Secrets  |  |
+
+<a id="markdown-333-每日投币数量" name="333-每日投币数量"></a>
+#### 3.3.3. 每日投币数量
+
 每天投币的总目标数量，因为投币获取经验只与次数有关，所以程序每次投币只会投1个，也就是说该配置也表示每日投币次数。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `DailyTaskConfig__NumberOfCoins` |
+| 配置Key | `DailyTaskConfig:NumberOfCoins` |
 | 值域   | [0,5]，为安全考虑，程序内部还会做验证，最大不能超过5 |
 | 默认值   | 5 |
 | 环境变量   | `Ray_DailyTaskConfig__NumberOfCoins` |
 | GitHub Secrets  | `NUMBEROFCOINS` |
 
-<a id="markdown-332-投币时是否同时点赞" name="332-投币时是否同时点赞"></a>
-#### 3.3.2. 投币时是否同时点赞
+<a id="markdown-334-投币时是否同时点赞" name="334-投币时是否同时点赞"></a>
+#### 3.3.4. 投币时是否同时点赞
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `DailyTaskConfig__SelectLike` |
+| 配置Key | `DailyTaskConfig:SelectLike` |
 | 值域   | [true,false] |
 | 默认值   | false |
 | 环境变量   | `Ray_DailyTaskConfig__SelectLike` |
 | GitHub Secrets  | `SELECTLIKE` |
 
-<a id="markdown-333-优先选择支持的up主id集合" name="333-优先选择支持的up主id集合"></a>
-#### 3.3.3. 优先选择支持的up主Id集合
-通过填入自己选择的up主ID，以后观看、分享和投币，都会优先从配置的up主下面挑选视频，如果没有找到,则会去你的**特别关注**列表中随机再获取，再然后会去**普通关注**列表中随机获取，最后会去排行榜中随机获取。
+<a id="markdown-335-优先选择支持的up主id集合" name="335-优先选择支持的up主id集合"></a>
+#### 3.3.5. 优先选择支持的up主Id集合
 
-当前不再推荐使用该配置，建议通过添加到**特别关注**列表来实现优先支持。
+通过填入自己选择的up主ID，以后观看、分享和投币，都会优先从配置的up主下面挑选视频，如果没有找到,则会去你的**特别关注**列表中随机再获取，再然后会去**普通关注**列表中随机获取，最后会去排行榜中随机获取。
 
 **注意：该配置的默认值是作者的upId，如需换掉的话，直接更改即可。**
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `DailyTaskConfig__SupportUpIds` |
+| 配置Key | `DailyTaskConfig:SupportUpIds` |
 | 值域   | up主ID，多个用英文逗号分隔，默认是作者本人的UpId，如需删除可以配置为空格字符串或“-1”，也可以配置为其他人的UpId |
 | 默认值   | 作者的upId |
 | 环境变量   | `Ray_DailyTaskConfig__SupportUpIds` |
@@ -325,53 +368,78 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 ![UpId](imgs/get-up-id.png)
 
-<a id="markdown-334-每月几号自动充电" name="334-每月几号自动充电"></a>
-#### 3.3.4. 每月几号自动充电
+<a id="markdown-336-每月几号自动充电" name="336-每月几号自动充电"></a>
+#### 3.3.6. 每月几号自动充电
+
 使用大会员免费赠送的B币券自动充电，如不使用，每个月结束会自动失效。没有B币券或B币券余额不足2，不会进行充电。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `DailyTaskConfig__DayOfAutoCharge` |
+| 配置Key | `DailyTaskConfig:DayOfAutoCharge` |
 | 值域   | [-1,31]，-1表示不指定，默认月底最后一天；0表示不充电 |
 | 默认值   | -1 |
 | 环境变量   | `Ray_DailyTaskConfig__DayOfAutoCharge` |
 | GitHub Secrets  | `DAYOFAUTOCHARGE` |
 
-<a id="markdown-335-充电对象" name="335-充电对象"></a>
-#### 3.3.5. 充电对象
+<a id="markdown-337-充电对象" name="337-充电对象"></a>
+#### 3.3.7. 充电对象
+
 充电对象的upId，需要配合前一个DayOfAutoCharge配置项使用。-1表示不指定，默认为自己充电；其他Id则会尝试为配置的UpId充电。
 
-**注意：该配置的默认值是作者的upId，如果你已认证通过了创作身份（即可以为自己充电），则建议将其改为为自己充电（配置为-1即可），也可以配置为某个自己指定的创作者upId。
+注意：该配置的默认值是作者的upId，如果你已认证通过了创作身份（即可以为自己充电），则建议将其改为为自己充电（配置为-1即可），也可以配置为某个自己指定的创作者upId。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `DailyTaskConfig__AutoChargeUpId` |
+| 配置Key | `DailyTaskConfig:AutoChargeUpId` |
 | 值域   | up的Id字符串，默认是作者本人的UpId；-1表示不指定，为自己充电；其他Id则会尝试为配置的UpId充电 |
 | 默认值   | 作者的upId |
 | 环境变量   | `Ray_DailyTaskConfig__AutoChargeUpId` |
 | GitHub Secrets  | `AUTOCHARGEUPID` |
 
-<a id="markdown-336-每月几号自动领取会员权益" name="336-每月几号自动领取会员权益"></a>
-#### 3.3.6. 每月几号自动领取会员权益
+<a id="markdown-338-每月几号自动领取会员权益" name="338-每月几号自动领取会员权益"></a>
+#### 3.3.8. 每月几号自动领取会员权益
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `DailyTaskConfig__DayOfReceiveVipPrivilege` |
+| 配置Key | `DailyTaskConfig:DayOfReceiveVipPrivilege` |
 | 值域   | [-1,31]，-1表示不指定，默认每月1号；0表示不领取 |
 | 默认值   | 1 |
 | 环境变量   | `Ray_DailyTaskConfig__DayOfReceiveVipPrivilege` |
 | GitHub Secrets  | `DAYOFRECEIVEVIPPRIVILEGE` |
 
-<a id="markdown-337-每月几号进行直播中心银瓜子兑换硬币" name="337-每月几号进行直播中心银瓜子兑换硬币"></a>
-#### 3.3.7. 每月几号进行直播中心银瓜子兑换硬币
+<a id="markdown-339-每月几号进行直播中心银瓜子兑换硬币" name="339-每月几号进行直播中心银瓜子兑换硬币"></a>
+#### 3.3.9. 每月几号进行直播中心银瓜子兑换硬币
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `DailyTaskConfig__DayOfExchangeSilver2Coin` |
+| 配置Key | `DailyTaskConfig:DayOfExchangeSilver2Coin` |
 | 值域   | [-1,31]，-1表示不指定，默认每月最后一天；-2表示每天；0表示不进行兑换 |
 | 默认值   | -1 |
 | 环境变量   | `Ray_DailyTaskConfig__DayOfExchangeSilver2Coin` |
 | GitHub Secrets  | `DayOfExchangeSilver2Coin` |
+
+<a id="markdown-3310-lv6后开启硬币白嫖模式" name="3310-lv6后开启硬币白嫖模式"></a>
+#### 3.3.10. Lv6后开启硬币白嫖模式
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `DailyTaskConfig:SaveCoinsWhenLv6` |
+| 值域   | [true,false]，true表示开启，Lv6的账号不会投币 |
+| 默认值   | false |
+| 环境变量   | `Ray_DailyTaskConfig__SaveCoinsWhenLv6` |
+| GitHub Secrets  |  |
+
+<a id="markdown-3311-是否开启专栏投币" name="3311-是否开启专栏投币"></a>
+#### 3.3.11. 是否开启专栏投币
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `DailyTaskConfig:IsDonateCoinForArticle` |
+| 值域   | [true,false]|
+| 默认值   | false |
+| 环境变量   | `Ray_DailyTaskConfig__IsDonateCoinForArticle` |
+| GitHub Secrets  |  |
+
 
 <a id="markdown-34-天选时刻抽奖相关" name="34-天选时刻抽奖相关"></a>
 ### 3.4. 天选时刻抽奖相关
@@ -381,7 +449,7 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `LiveLotteryTaskConfig__ExcludeAwardNames` |
+| 配置Key | `LiveLotteryTaskConfig:ExcludeAwardNames` |
 | 值域   | 一串字符串，多个关键字使用`\|`符号隔开 |
 | 默认值   | `舰\|船\|航海\|代金券\|自拍\|照\|写真\|图` |
 | 环境变量   | `Ray_LiveLotteryTaskConfig__ExcludeAwardNames` |
@@ -392,7 +460,7 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `LiveLotteryTaskConfig__IncludeAwardNames` |
+| 配置Key | `LiveLotteryTaskConfig:IncludeAwardNames` |
 | 值域   | 一串字符串，多个关键字使用`\|`符号隔开 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_LiveLotteryTaskConfig__IncludeAwardNames` |
@@ -403,7 +471,7 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `LiveLotteryTaskConfig__AutoGroupFollowings` |
+| 配置Key | `LiveLotteryTaskConfig:AutoGroupFollowings` |
 | 值域   | [true,false] |
 | 默认值   | true |
 | 环境变量   | `Ray_LiveLotteryTaskConfig__AutoGroupFollowings` |
@@ -415,7 +483,7 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 不想参与抽奖的主播Upid集合，多个用英文逗号分隔，配置后不会参加黑名单中的主播的抽奖活动。默认值是目前已知的中奖后拒绝发奖的Up，后期还会继续补充，也反映反馈。
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `LiveLotteryTaskConfig__DenyUids` |
+| 配置Key | `LiveLotteryTaskConfig:DenyUids` |
 | 值域   | 字符串，如"65566781,1277481241" |
 | 默认值   | "65566781,1277481241,1643654862,603676925" |
 | 环境变量   | `Ray_LiveLotteryTaskConfig__DenyUids` |
@@ -429,7 +497,7 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `UnfollowBatchedTaskConfig__GroupName` |
+| 配置Key | `UnfollowBatchedTaskConfig:GroupName` |
 | 值域   | 字符串 |
 | 默认值   | 天选时刻 |
 | 环境变量   | `Ray_UnfollowBatchedTaskConfig__GroupName` |
@@ -440,7 +508,7 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Ray_UnfollowBatchedTaskConfig__Count` |
+| 配置Key | `UnfollowBatchedTaskConfig:Count` |
 | 值域   | 数字，[-1,+]，-1表示全部 |
 | 默认值   | 5 |
 | 环境变量   | `Ray_UnfollowBatchedTaskConfig__Count` |
@@ -451,7 +519,7 @@ export Ray_Serilog__WriteTo__9__Args__token="abcde"
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Ray_UnfollowBatchedTaskConfig__RetainUids` |
+| 配置Key | `UnfollowBatchedTaskConfig:RetainUids` |
 | 值域   | 字符串，多个使用英文逗号分隔 |
 | 默认值   | 108569350 |
 | 环境变量   | `Ray_UnfollowBatchedTaskConfig__RetainUids` |
@@ -463,195 +531,297 @@ v1.0.x仅支持推送到Server酱，v1.1.x之后重新定义了推送地概念�
 
 配置多个，多个端均会收到日志消息。推荐Telegram、企业微信、Server酱。
 
-<a id="markdown-361-telegram机器人" name="361-telegram机器人"></a>
-#### 3.6.1. Telegram机器人
+<a id="markdown-361-是否开启每个账号单独推送消息" name="361-是否开启每个账号单独推送消息"></a>
+#### 3.6.1. 是否开启每个账号单独推送消息
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `Notification:IsSingleAccountSingleNotify` |
+| 意义 | 开启后，每个账号会单独推送消息。否则多账号合并只推送一条消息 |
+| 值域   | [true,false] |
+| 默认值   | true |
+| 环境变量   | `Ray_Notification__IsSingleAccountSingleNotify` |
+| GitHub Secrets  | |
+
+<a id="markdown-362-telegram机器人" name="362-telegram机器人"></a>
+#### 3.6.2. Telegram机器人
+
 ![TG推送效果](imgs/push-tg.png)
-<a id="markdown-3611-bottoken" name="3611-bottoken"></a>
-##### 3.6.1.1. botToken
+
+<a id="markdown-3621-bottoken" name="3621-bottoken"></a>
+##### 3.6.2.1. botToken
+
 点击 https://core.telegram.org/api#bot-api 查看如何创建机器人并获取到机器人的botToken。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__3__Args__botToken` |
+| 配置Key | `Serilog:WriteTo:3:Args:botToken` |
 | 意义 | 用于将日志输出到Telegram机器人 |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
-| 环境变量   |  |
+| 环境变量   | Ray_Serilog__WriteTo__3__Args__botToken |
 | GitHub Secrets  | `PUSHTGTOKEN`|
 
-<a id="markdown-3612-chatid" name="3612-chatid"></a>
-##### 3.6.1.2. chatId
+<a id="markdown-3622-chatid" name="3622-chatid"></a>
+##### 3.6.2.2. chatId
 点击 https://api.telegram.org/bot{TOKEN}/getUpdates 获取到与机器人的chatId（需要用上面获取到的Token替换进链接里的{TOKEN}后访问）
 
 P.S.访问链接需要能访问“外网”，有vpn的挂vpn。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__3__Args__chatId` |
+| 配置Key | `Serilog:WriteTo:3:Args:chatId` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__3__Args__chatId` |
 | 命令行示范   | 无 |
 | GitHub Secrets  | `PUSHTGCHATID`|
 
-<a id="markdown-362-企业微信机器人" name="362-企业微信机器人"></a>
-#### 3.6.2. 企业微信机器人
-在群内添加机器人，获取到机器人的WebHook地址，添加到配置中。
+<a id="markdown-3623-proxy" name="3623-proxy"></a>
+##### 3.6.2.3. proxy
 
-![企业微信推送效果](imgs/push-workweixin.png)
-
-<a id="markdown-3621-webhookurl" name="3621-webhookurl"></a>
-##### 3.6.2.1. webHookUrl
+使用代理
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__4__Args__webHookUrl` |
-| 值域   | 一串字符串 |
+| 配置Key | `Serilog:WriteTo:3:Args:proxy` |
+| 值域   | 一串字符串，格式为user:password@host:port |
 | 默认值   | 空 |
-| 环境变量   | `Ray_Serilog__WriteTo__4__Args__webHookUrl` |
+| 环境变量   | `Ray_Serilog__WriteTo__3__Args__proxy` |
 | 命令行示范   | 无 |
-| GitHub Secrets  | `PUSHWEIXINURL`|
+| GitHub Secrets  | ``|
 
-<a id="markdown-363-钉钉机器人" name="363-钉钉机器人"></a>
-#### 3.6.3. 钉钉机器人
+<a id="markdown-363-企业微信机器人" name="363-企业微信机器人"></a>
+#### 3.6.3. 企业微信机器人
+
 在群内添加机器人，获取到机器人的WebHook地址，添加到配置中。
 
-机器人的安全策略，当前不支持加签，请使用关键字策略，推荐关键字：`Ray` 或 `BiliBili`
-
-![钉钉推送效果](imgs/push-ding.png)
+![企业微信推送效果](imgs/push-workweixin.png)
 
 <a id="markdown-3631-webhookurl" name="3631-webhookurl"></a>
 ##### 3.6.3.1. webHookUrl
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__5__Args__webHookUrl` |
+| 配置Key | `Serilog:WriteTo:4:Args:webHookUrl` |
+| 值域   | 一串字符串 |
+| 默认值   | 空 |
+| 环境变量   | `Ray_Serilog__WriteTo__4__Args__webHookUrl` |
+| 命令行示范   | 无 |
+| GitHub Secrets  | `PUSHWEIXINURL`|
+
+<a id="markdown-364-钉钉机器人" name="364-钉钉机器人"></a>
+#### 3.6.4. 钉钉机器人
+
+在群内添加机器人，获取到机器人的WebHook地址，添加到配置中。
+
+机器人的安全策略，当前不支持加签，请使用关键字策略，推荐关键字：`Ray` 或 `BiliBili`
+
+![钉钉推送效果](imgs/push-ding.png)
+
+<a id="markdown-3641-webhookurl" name="3641-webhookurl"></a>
+##### 3.6.4.1. webHookUrl
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `Serilog:WriteTo:5:Args:webHookUrl` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__5__Args__webHookUrl` |
 | GitHub Secrets  | `PUSHDINGURL`|
 
-<a id="markdown-364-server酱" name="364-server酱"></a>
-#### 3.6.4. Server酱
+<a id="markdown-365-server酱" name="365-server酱"></a>
+#### 3.6.5. Server酱
 官网： http://sc.ftqq.com/9.version 
 
 ![Server酱推送效果](imgs/wechat-push.png)
 
-<a id="markdown-3641-turbosckeyserver酱sckey" name="3641-turbosckeyserver酱sckey"></a>
-##### 3.6.4.1. TurboScKey（Server酱SCKEY）
+<a id="markdown-3651-turbosckeyserver酱sckey" name="3651-turbosckeyserver酱sckey"></a>
+##### 3.6.5.1. TurboScKey（Server酱SCKEY）
 获取方式请参考官网。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__6__Args__turboScKey` |
+| 配置Key | `Serilog:WriteTo:6:Args:turboScKey` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
-| 环境变量   | `Ray_Serilog__WriteTo__6__Args__turboScKey=abcdefg` |
+| 环境变量   | `Ray_Serilog__WriteTo__6__Args__turboScKey` |
 | GitHub Secrets  | `PUSHSERVERTSCKEY` |
 
-<a id="markdown-365-酷推" name="365-酷推"></a>
-#### 3.6.5. 酷推
+<a id="markdown-366-酷推" name="366-酷推"></a>
+#### 3.6.6. 酷推
 https://cp.xuthus.cc/
-<a id="markdown-3651-skey" name="3651-skey"></a>
-##### 3.6.5.1. sKey
+<a id="markdown-3661-skey" name="3661-skey"></a>
+##### 3.6.6.1. sKey
 该平台可能还在完善当中，对接时我发现其接口定义不规范，且机器人容易被封，所以不推荐使用，且不接受提酷推推送相关bug。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__7__Args__sKey` |
+| 配置Key | `Serilog:WriteTo:7:Args:sKey` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__7__Args__sKey` |
 | GitHub Secrets  | `PUSHCOOLSKEY` |
 
-<a id="markdown-366-推送到自定义api" name="366-推送到自定义api"></a>
-#### 3.6.6. 推送到自定义Api
+<a id="markdown-367-推送到自定义api" name="367-推送到自定义api"></a>
+#### 3.6.7. 推送到自定义Api
 这是我简单封装了一个通用的推送接口，可以推送到任意的api地址，如果有自己的机器人或自己的用于接受日志的api，可以根据需要自定义配置。
-<a id="markdown-3661-api" name="3661-api"></a>
-##### 3.6.6.1. api
+<a id="markdown-3671-api" name="3671-api"></a>
+##### 3.6.7.1. api
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__8__Args__api` |
+| 配置Key | `Serilog:WriteTo:8:Args:api` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__8__Args__api` |
 | GitHub Secrets  | `PUSHOTHERAPI` |
-<a id="markdown-3662-placeholder" name="3662-placeholder"></a>
-##### 3.6.6.2. placeholder
+
+<a id="markdown-3672-placeholder" name="3672-placeholder"></a>
+##### 3.6.7.2. placeholder
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__8__Args__placeholder` |
+| 配置Key | `Serilog:WriteTo:8:Args:placeholder` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__8__Args__placeholder` |
 | GitHub Secrets  | `PUSHOTHERPLACEHOLDER` |
-<a id="markdown-3663-bodyjsontemplate" name="3663-bodyjsontemplate"></a>
-##### 3.6.6.3. bodyJsonTemplate
+
+<a id="markdown-3673-bodyjsontemplate" name="3673-bodyjsontemplate"></a>
+##### 3.6.7.3. bodyJsonTemplate
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__8__Args__bodyJsonTemplate` |
+| 配置Key | `Serilog:WriteTo:8:Args:bodyJsonTemplate` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__8__Args__bodyJsonTemplate` |
 | GitHub Secrets  | `PUSHOTHERBODYJSONTEMPLATE` |
 
-<a id="markdown-367-pushplus推荐" name="367-pushplus推荐"></a>
-#### 3.6.7. PushPlus[推荐]
+<a id="markdown-368-pushplus推荐" name="368-pushplus推荐"></a>
+#### 3.6.8. PushPlus[推荐]
+
 官网： http://www.pushplus.plus/doc/ 
 
-<a id="markdown-3671-pushplus的token" name="3671-pushplus的token"></a>
-##### 3.6.7.1. PushPlus的Token
+<a id="markdown-3681-pushplus的token" name="3681-pushplus的token"></a>
+##### 3.6.8.1. PushPlus的Token
+
 获取方式请参考官网。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__9__Args__token` |
+| 配置Key | `Serilog:WriteTo:9:Args:token` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__9__Args__token` |
 | GitHub Secrets  | `PUSHPLUSTOKEN` |
 
-<a id="markdown-3672-pushplus的topic" name="3672-pushplus的topic"></a>
-##### 3.6.7.2. PushPlus的Topic
+<a id="markdown-3682-pushplus的topic" name="3682-pushplus的topic"></a>
+##### 3.6.8.2. PushPlus的Topic
+
 获取方式请参考官网。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__9__Args__topic` |
+| 配置Key | `Serilog:WriteTo:9:Args:topic` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__9__Args__topic` |
 | GitHub Secrets  | `PUSHPLUSTOPIC` |
 
-<a id="markdown-3673-pushplus的channel" name="3673-pushplus的channel"></a>
-##### 3.6.7.3. PushPlus的Channel
+<a id="markdown-3683-pushplus的channel" name="3683-pushplus的channel"></a>
+##### 3.6.8.3. PushPlus的Channel
+
 获取方式请参考官网。
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__9__Args__channel` |
+| 配置Key | `Serilog:WriteTo:9:Args:channel` |
 | 值域   | 一串字符串，[wechat,webhook,cp,sms,mail] |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__9__Args__channel` |
 | GitHub Secrets  | `PUSHPLUSCHANNEL` |
 
-<a id="markdown-3674-pushplus的webhook" name="3674-pushplus的webhook"></a>
-##### 3.6.7.4. PushPlus的Webhook
+<a id="markdown-3684-pushplus的webhook" name="3684-pushplus的webhook"></a>
+##### 3.6.8.4. PushPlus的Webhook
+
 获取方式请参考官网。
 
 webhook编码(不是地址)，在官网平台设定，仅在channel使用webhook渠道和CP渠道时需要填写
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__9__Args__webhook` |
+| 配置Key | `Serilog:WriteTo:9:Args:webhook` |
 | 值域   | 一串字符串 |
 | 默认值   | 空 |
 | 环境变量   | `Ray_Serilog__WriteTo__9__Args__webhook` |
 | 命令行示范   |  |
 | GitHub Secrets  | `PUSHPLUSWEBHOOK` |
+
+<a id="markdown-369-microsoft-teams" name="369-microsoft-teams"></a>
+#### 3.6.9. Microsoft Teams
+
+官网： https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook
+
+<a id="markdown-3691-microsoft-teams的webhook" name="3691-microsoft-teams的webhook"></a>
+##### 3.6.9.1. Microsoft Teams的Webhook
+
+webhook的完整地址，在Teams的Channel中获取，详细获取方式请参考官网。
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `Serilog:WriteTo:10:Args:webhook` |
+| 值域   | 一串字符串 |
+| 默认值   | 空 |
+| 环境变量   | `Ray_Serilog__WriteTo__10__Args__webhook` |
+| 命令行示范   |  |
+| GitHub Secrets  |  |
+
+<a id="markdown-3610-企业微信应用推送" name="3610-企业微信应用推送"></a>
+#### 3.6.10. 企业微信应用推送
+
+官网： https://developer.work.weixin.qq.com/tutorial/application-message
+
+当`corpId`、`agentId`、`secret`均不为空时，自动开启推送，否则关闭。
+
+`toUser`、`toParty`、`toTag`3个配置非必填，但不可同时为空，默认`toUser`为`@all`，向所有用户推送。
+
+<a id="markdown-36101-企业微信应用推送的corpid" name="36101-企业微信应用推送的corpid"></a>
+##### 3.6.10.1. 企业微信应用推送的corpId
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `Serilog:WriteTo:11:Args:corpId` |
+| 值域   | 一串字符串 |
+| 默认值   | 空 |
+| 环境变量   | `Ray_Serilog__WriteTo__11__Args__corpId` |
+| 命令行示范   |  |
+| GitHub Secrets  |  |
+
+<a id="markdown-36102-企业微信应用推送的agentid" name="36102-企业微信应用推送的agentid"></a>
+##### 3.6.10.2. 企业微信应用推送的agentId
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `Serilog:WriteTo:11:Args:agentId` |
+| 值域   | 一串字符串 |
+| 默认值   | 空 |
+| 环境变量   | `Ray_Serilog__WriteTo__11__Args__agentId` |
+| 命令行示范   |  |
+| GitHub Secrets  |  |
+
+<a id="markdown-36103-企业微信应用推送的secret" name="36103-企业微信应用推送的secret"></a>
+##### 3.6.10.3. 企业微信应用推送的secret
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `Serilog:WriteTo:11:Args:secret` |
+| 值域   | 一串字符串 |
+| 默认值   | 空 |
+| 环境变量   | `Ray_Serilog__WriteTo__11__Args__secret` |
+| 命令行示范   |  |
+| GitHub Secrets  |  |
 
 
 <a id="markdown-37-日志相关" name="37-日志相关"></a>
@@ -671,7 +841,7 @@ BiliBiliTool 使用 Serilog 作为日志组件，所以其值域与 Serilog 的�
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__0__Args__restrictedToMinimumLevel` |
+| 配置Key | `Serilog:WriteTo:0:Args:restrictedToMinimumLevel` |
 | 值域   | [Information,Debug] |
 | 默认值   | 1 |
 | 环境变量   | `Ray_Serilog__WriteTo__0__Args__restrictedToMinimumLevel` |
@@ -688,9 +858,59 @@ BiliBiliTool 使用 Serilog 作为日志组件，所以可以参考 Serilog 的�
 
 |   TITLE   | CONTENT   |
 | ---------- | -------------- |
-| 配置Key | `Serilog__WriteTo__0__Args__outputTemplate` |
+| 配置Key | `Serilog:WriteTo:0:Args:outputTemplate` |
 | 值域   | 字符串 |
 | 默认值   | `[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}` |
 | 环境变量   | `Ray_Serilog__WriteTo__0__Args__outputTemplate` |
 | GitHub Secrets  | `CONSOLELOGTEMPLATE` |
 
+<a id="markdown-373-定时任务相关" name="373-定时任务相关"></a>
+#### 3.7.3. 定时任务相关
+适用于 [方式四：docker容器化运行（推荐）](../docker/README.md)，用于配置定时任务。
+
+<a id="markdown-374-定时任务" name="374-定时任务"></a>
+#### 3.7.4. 定时任务
+以下环境变量的值应为有效的 [cron 表达式](https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm)。
+
+当被设置时，对应定时任务将开启。
+
+|   环境变量   | 定时任务   |
+| ---------- | -------------- |
+| `Ray_DailyTaskConfig__Cron` | 每日任务 |
+| `Ray_LiveLotteryTaskConfig__Cron` | 天选时刻抽奖 |
+| `Ray_UnfollowBatchedTaskConfig__Cron` | 批量取关 |
+| `Ray_VipBigPointConfig__Cron` | 大会员大积分 |
+
+<a id="markdown-375-crontab" name="375-crontab"></a>
+#### 3.7.5. Crontab
+若该环境变量被设置，其值将直接追加在 cron 文件的末尾，可用于设置额外的定时任务。
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 值域   | 一串字符串 |
+| 默认值   | 空 |
+| 环境变量   | `Ray_Crontab` |
+
+使用例
+
+```yaml
+environment:
+  Ray_BiliBiliCookies: somecookies
+  Ray_Crontab: |
+    0 15 * * * dotnet /app/Ray.BiliBiliTool.Console.dll --runTasks=Daily >> /var/log/cron.log
+    0 22 * * * dotnet /app/Ray.BiliBiliTool.Console.dll --runTasks=LiveLottery >> /var/log/cron.log
+```
+
+<a id="markdown-38-大积分相关" name="38-大积分相关"></a>
+### 3.8. 大积分相关
+
+<a id="markdown-381-自定义观看番剧" name="381-自定义观看番剧"></a>
+#### 3.8.1. 自定义观看番剧
+
+|   TITLE   | CONTENT   |
+| ---------- | -------------- |
+| 配置Key | `VipBigPointConfig:ViewBangumis` |
+| 值域   | 番剧的ssid（season_id） |
+| 默认值   | `33378`（名侦探柯南） |
+| 环境变量   | `Ray_VipBigPointConfig__ViewBangumis` |
+| GitHub Secrets  | |

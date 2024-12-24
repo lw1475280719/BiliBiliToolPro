@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+# cron:0 13 * * *
 # new Env("bili天选时刻")
-# cron 0 13 * * * bili_task_liveLottery.sh
 
-dotnet run --project /ql/repo/raywangqvq_bilibilitoolpro/src/Ray.BiliBiliTool.Console --ENVIRONMENT=Production --runTasks=LiveLottery
+. bili_task_base.sh
+
+target_task_code="LiveLottery"
+run_task "${target_task_code}"
